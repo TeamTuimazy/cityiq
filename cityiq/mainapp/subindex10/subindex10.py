@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 from multiprocessing.pool import ThreadPool
+import cfscrape
 
 
 class Indicator46_1:
@@ -8,7 +9,7 @@ class Indicator46_1:
     city = None
     counter = 0
     headers = {
-        "upgrade-insecure-requests": "1",
+        'Upgrade-Insecure-Requests':'1',
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
         "cookie": "yuidss=6849301721606035993; yandexuid=6849301721606035993; ymex=1921395994.yrts.1606035994#1921395993.yrtsi.1606035993; is_gdpr=0; gdpr=0; _ym_uid=160605751914437436; mda=0; instruction=1; yandex_gid=20717; is_gdpr_b=CMmFQhDfDigC; font_loaded=YSv1; computer=1; Silicon=1; my=YwA=; Session_id=3:1606409148.5.0.1606396719583:S7joXg:2b.1|748624959.0.2|226419.251089.s39WTqiQgQBuhRTqq_bHAkBa4u4; sessionid2=3:1606409148.5.0.1606396719583:S7joXg:2b.1|748624959.0.2|226419.565368.D_cHE72oHPAc1eg2olLv0mRf0T8; L=d1V0RWBWYWZnc0h5f2ZYZVABS1txVAVmIBxPHEsFPB4=.1606409148.14431.318110.f09021bcb001352180f44f8eede414c8; yandex_login=levi.boy; i=i/ECfgXQ+SCZxbkseDlwWsYHTFtrvMB0Y+3P4AWi7K1At2tqhVXR/c6UVP7+Kf6kGjj6xek2yDe8BRz6/Eb2Hu2fo70=; _ym_isad=1; _ym_d=1606554825; zm=m-white_bender_zen-ssr.gen.webp.css-https%3As3home-static_z5j2IpHAaMuffoBw_d3QYA3RkEQ%3Al; Nickel=1; yp=1608986567.ygu.1#1622322829.szm.1:1920x1080:1920x947#1921754646.multib.1#1921755129.2fa.1#1921769148.udn.cDpMZXZpIEJveQ%3D%3D; yabs-frequency=/5/0000000000000000/55QmS9K00010Fc0DLh1mbG00040-OKm5St2K0000G3uXImLpS9G00010FY7iLB1mbG00040-8DPOi72L0000G3v0/; _ym_visorc_49540177=b"
     }
@@ -32,7 +33,10 @@ class Indicator46_1:
         """Получение подкаталога"""
         items = []
         for catalog_link in catalogs:
-            r = requests.get('https://yandex.ru' + catalog_link, headers=self.headers)
+            s = requests.Session()
+            s.headers = self.headers
+            s = cfscrape.create_scraper(sess=s)
+            r = s.get('https://yandex.ru' + catalog_link)
             for i in range(1, 100):
                 try:
                     item = r.text.split('Link Link_theme_black HomeRubricMenu-TopSpecializationLink" href="')[i].split('"')[0]

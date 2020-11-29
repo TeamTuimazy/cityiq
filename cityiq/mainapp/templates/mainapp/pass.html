@@ -3,11 +3,71 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+{% block css %}
+<style>
+        .cont {
+            display: flex;
+            margin-right: -0.75em;
+            margin-left: -0.75em;
+        }
 
+        .col-md {
+            padding-top: 200px;
+            padding-bottom: 60px;
+        }
+
+        .col-md p {
+            color: #ffffff;
+            font-family: Roboto;
+            font-size: 26px;
+            font-weight: 100;
+            line-height: 30px;
+            text-align: justify;
+        }
+
+        .banner_img img {
+            max-width: none;
+        }
+
+        .padbot0 {
+            height: 610px;
+        }
+
+        @media (max-width: 600px) {
+            .banner_img img {
+                max-width: 300px;
+            }
+            .cont {
+                display: block;
+                margin-right: 0;
+                margin-left: 0;
+            }
+            .col-md {
+                padding-left: 30px;
+                padding-top: 0;
+            }
+            .col-md p {
+                padding-right: 30px;
+            }
+        }
+
+        @media screen and (min-height: 800px) {
+            .padbot0 {
+                height: 826px;
+            }
+        }
+
+        @media screen and (min-height: 1000px) {
+            .padbot0 {
+                height: 930px;
+            }
+        }
+    </style>
+{% endblock %}
 {% block content %}
-<section id="home" class="padbot0">
-    <div class="flexslider top_slider">
-        <div style="max-width: 900px; margin-right: auto; margin-left: auto; padding-top: 60px; padding-bottom: 100px;">
+<section id="home" class="padbot0" >
+    <div class="flexslider top_slider h-100" style="height: 100%;">
+        <div style="max-width: 900px; margin-right: auto; margin-left: auto; display: flex;flex-direction: column; justify-content: center; height: 100%;">
             <div class="cont">
                 <div class="col-12">
                     <div class="banner_img" style="text-align: center;">
@@ -22,5 +82,4 @@
         </div>
     </div>
 </section>
-
 {% endblock %}

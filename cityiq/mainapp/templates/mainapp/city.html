@@ -3,7 +3,45 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+{% block css %}
+<style>
+        .main {
+            box-shadow: 0px 2px 4px rgba(100, 100, 100, 0.5);
+            border-radius: 40px;
+            margin: 50px;
+            width: auto;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
 
+        .img {
+            float: right;
+        }
+
+        @media (max-width: 600px) {
+            .main {
+                margin-top: 100px;
+            }
+            .img {
+                float: none;
+            }
+        }
+
+        .highcharts-axis-labels {
+            font-family: 'Roboto';
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        center {
+            font-family: 'Roboto';
+        }
+    </style>
+{% endblock %}
 {% block content %}
 <div class="main">
     <section id="main" style="padding-top: 40px; padding-bottom: 40px; border-radius: 40px;">
@@ -81,7 +119,16 @@
             },
 
             xAxis: {
-                categories: ["Городское управление", "Инновации для городской среды", "Интеллектуальные системы общественной безопасности", "Инфраструктура сетей связи", "Умное ЖКХ", "Умный городской транспорт", "Интеллектуальный системы экологической безопасности", "Туризм и сервис", "Интеллектуальные системы социальных услуг", "Экономическое состояние и инвестиционный климат"],
+                categories: ["<a href='/subindex/{{city.id}}/1'>Городское управление</a>",
+                             "<a href='/subindex/{{city.id}}/2'>Инновации для городской среды</a>",
+                             "<a href='/subindex/{{city.id}}/3'>Интеллектуальные системы общественной безопасности</a>",
+                             "<a href='/subindex/{{city.id}}/4'>Инфраструктура сетей связи</a>",
+                             "<a href='/subindex/{{city.id}}/5'>Умное ЖКХ</a>",
+                             "<a href='/subindex/{{city.id}}/6'>Умный городской транспорт</a>",
+                             "<a href='/subindex/{{city.id}}/7'>Интеллектуальный системы экологической безопасности</a>",
+                             "<a href='/subindex/{{city.id}}/8'>Туризм и сервис</a>",
+                             "<a href='/subindex/{{city.id}}/9'>Интеллектуальные системы социальных услуг</a>",
+                             "<a href='/subindex/{{city.id}}/10'>Экономическое состояние и инвестиционный климат</a>"],
                 tickmarkPlacement: 'on',
                 lineWidth: 0
             },

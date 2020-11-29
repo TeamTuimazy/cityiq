@@ -4,7 +4,7 @@ import re
 import unicodedata
 from pathlib import Path
 import random
-
+from .subindex10.subindex10 import Indicator46_1, Indicator46_2, Indicator47
 from decimal import Decimal
 from django.db import models
 from django.core import serializers
@@ -94,6 +94,24 @@ class First_Data_DB:
                 c.qty_peopls = population
                 c.link_gerb = gerb
             c.save()
+
+    def update_indicator_value(self):
+        c = City.objects.all()
+        for city in c:
+            i = IndexIQ.objects.filter(city = city.id)[0]
+            i461 = Indicator46_1()
+            i462 = Indicator46_2()
+            i47 = Indicator47()
+            i.indicator46_1_value = i461.get_data(city.name)
+            i.indicator46_2_value = i462.get_data(city.name)
+            i.indicator47_value = i47.get_data(city.name)
+            i.save()
+
+    def update_index(self):
+        c = City.objects.all()
+        for city in c:
+            i = IndexIQ.objects.filter(city=city.id)[0]
+            i.save()
 
     def create_indexes(self):
         random.seed()
@@ -287,63 +305,54 @@ class IndexIQ(models.Model):
     )
 
     # перечень индикаторов
-    indicator1 = models.BooleanField(
-        default=False,
-        verbose_name='Наличие цифровой платформы вовлечения граждан в решение вопросов городского развития',
-    )
-
-    indicator2 = models.DecimalField(
+    indicator46_1 = models.DecimalField(
         default=Decimal("0.0"),
         max_digits=5,
         decimal_places=2,
-        verbose_name='Количество уникальных активных пользователей цифровой платформы вовлечения граждан в решение '
-                     'вопросов городского развития на 10 тыс. человек',
+        verbose_name='Количество товаров и услуг, доступных через электронные торговые площадки на население города '
+                     'по данным Yandex',
     )
-
-    indicator3 = models.BooleanField(
-        default=False,
-        verbose_name='Наличие «цифрового двойника города»',
-    )
-
-    indicator4 = models.BooleanField(
-        default=False,
-        verbose_name='Наличие интеллектуального центра городского управления',
-    )
-
-    indicator5 = models.DecimalField(
+    indicator46_1_value = models.DecimalField(
         default=Decimal("0.0"),
         max_digits=5,
         decimal_places=2,
-        verbose_name='Доля городских служб, обладающих доступом к ИЦГУ',
+        verbose_name='Данные с Yandex',
     )
-    indicator6 = models.BooleanField(
-        default=False,
-        verbose_name='Наличие системы интеллектуального учета коммунальных ресурсов',
+    indicator46_1_date = models.DateField(
+        auto_now=True,
+        verbose_name='Дата получения',
     )
-
-    indicator7 = models.DecimalField(
+    indicator46_2 = models.DecimalField(
         default=Decimal("0.0"),
         max_digits=5,
         decimal_places=2,
-        verbose_name='Доля мкд, оснащенных интеллектуальными системами учета всех типов коммунальных ресурсов',
+        verbose_name='Количество товаров и услуг, доступных через электронные торговые площадки на население города '
+                     'по данным Youla',
     )
-
-    indicator8 = models.BooleanField(
-        default=False,
-        verbose_name='Наличие автоматических систем мониторинга состояния зданий',
-    )
-
-    indicator9 = models.DecimalField(
+    indicator46_2_value = models.DecimalField(
         default=Decimal("0.0"),
         max_digits=5,
         decimal_places=2,
-        verbose_name='Доля многоквартирных домов, оснащенных автоматическими системами мониторинга состояния зданий ',
+        verbose_name='Данные с Youla',
     )
-
-    indicator10 = models.BooleanField(
-        default=False,
-        verbose_name='Проведение общих собраний собственников помещений в многоквартирных домах (не менее 50%) '
-                     'посредством электронного голосования ',
+    indicator46_2_date = models.DateField(
+        auto_now=True,
+        verbose_name='Дата получения',
+    )
+    indicator47 = models.DecimalField(
+        default=Decimal("0.0"),
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Количество пунтков доставки компаний электронной торговли (постоматов) расположенных на '
+                     'территории городских земель (2GIS)',
+    )
+    indicator47_value = models.IntegerField(
+        default=0,
+        verbose_name='Данные с 2GIS',
+    )
+    indicator47_date = models.DateField(
+        auto_now=True,
+        verbose_name='Дата получения',
     )
 
     index_iq = models.DecimalField(
@@ -354,40 +363,43 @@ class IndexIQ(models.Model):
         verbose_name='Итоговый индекс IQ',
     )
 
-
-
     def __str__(self):
         return "Запись индикаторов для г. {}".format(self.city)
 
+
     def max(self, indicator):
-        indicator = "indicator{}".format(indicator)
         citys_in_group = City.objects.filter(type_city=self.city.type_city).values('id')
         return IndexIQ.objects.filter(city__in=[city.get('id') for city in citys_in_group]).aggregate(
             Max(indicator)).get("{}__max".format(indicator))
 
     def min(self, indicator):
-        indicator = "indicator{}".format(indicator)
         citys_in_group = City.objects.filter(type_city=self.city.type_city).values('id')
         return IndexIQ.objects.filter(city__in=[city.get('id') for city in citys_in_group]).aggregate(
             Min(indicator)).get("{}__min".format(indicator))
 
-    def range_ind(self, indicator, max_value_range=12):
-        ind = getattr(self, "indicator{}".format(indicator))
-        min = self.min(indicator)
-        max = self.max(indicator)
-        return (ind - min) / (max - min) * max_value_range
+    def update_indicators(self):
+        self.indicator46_1 = round(Decimal(self.range_ind('indicator46_1_value')),2)
+        self.indicator46_2 = round(Decimal(self.range_ind('indicator46_2_value')),2)
+        self.indicator47 = round(Decimal(self.range_ind('indicator47_value')),2)
+        self.direction10 = round((self.indicator46_1 + self.indicator46_2 + self.indicator47)/3,2)
+        self.save()
 
-    def update_index(self):
-        # тут будут проводиться все расчеты
-        pass
+    def range_ind(self, indicator, max_value_range=12):
+        ind = Decimal(getattr(self, indicator))
+        min = Decimal(self.min(indicator))
+        max = Decimal(self.max(indicator))
+        if max - min != 0:
+            return (ind - min) / (max - min) * max_value_range
+        else:
+            return 0
+
 
     def save(self, *args, **kwargs):
         self.index_iq = self.direction1 + self.direction2 \
                         + self.direction3 +self.direction4 \
                         + self.direction5 +self.direction6 \
                         + self.direction7 + self.direction8 \
-                        + self.direction9 + self.direction10 \
-
+                        + self.direction9 + self.direction10
         super().save(*args, **kwargs)
         history = HistoryIndexIQ()
         history.serialize_object = serializers.serialize('json',IndexIQ.objects.filter(pk=self.id))

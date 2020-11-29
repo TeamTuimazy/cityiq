@@ -3,7 +3,39 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+{% block css %}
+    <style>
+        .cont {
+            display: flex;
+            margin-right: -0.75em;
+            margin-left: -0.75em;
+        }
 
+        .col-md {
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        .banner_img img {
+            max-width: none;
+        }
+
+        @media (max-width: 600px) {
+            .banner_img img {
+                max-width: 300px;
+            }
+            .cont {
+                display: block;
+                margin-right: 0;
+                margin-left: 0;
+            }
+            .col-md {
+                padding-left: 30px;
+                padding-top: 0;
+            }
+        }
+    </style>
+{% endblock %}
 {% block content %}
 
 <section id="home" class="padbot0">

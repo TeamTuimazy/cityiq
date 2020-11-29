@@ -1,0 +1,121 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block css %}
+<style>
+        .main {
+            box-shadow: 0px 2px 4px rgba(100, 100, 100, 0.5);
+            border-radius: 40px;
+            margin: 50px;
+            width: auto;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        .img {
+            float: right;
+        }
+
+        .tab th {
+            text-align: center;
+        }
+
+        .tab td {
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .main {
+                margin-top: 100px;
+            }
+            .img {
+                float: none;
+            }
+        }
+
+        .highcharts-axis-labels {
+            font-family: 'Roboto';
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        center {
+            font-family: 'Roboto';
+        }
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="main">
+    <section id="main" style="padding-top: 40px; padding-bottom: 40px; border-radius: 40px;">
+
+        <div style="padding-left: 50px; padding-right: 50px;">
+            <div>
+                <div>
+                    <h3 style="text-align: center; font-weight:bold; padding-top: 20px; font-size: 36px;">Экономическое
+                        состояние и инвестиционный климат ({{ index.direction10 }})</h3>
+                    <h2 style="text-align: center; font-weight:bold; padding-top: 20px; font-size: 36px;">{{ city.name }}</h2>
+                </div>
+            </div>
+            <div>
+                <div class="margbot30" style="font-size: 24px; width: 100%; text-align: justify; padding-top: 10px">
+                    <table class="tab" cols="4" cellspacing="1" cellpadding="10"
+                           style="padding-left: 10px; padding-right: 10px; font-weight: normal; color: #343434; margin-top: 10px;">
+                        <tr style="text-align: center;">
+                            <th>№</th>
+                            <th>Индикатор</th>
+                            <th style="padding-right: 10px;">Значение</th>
+                            <th style="padding-right: 10px;">Данные из интернета</th>
+                            <th>Дата последнего запроса</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td style="text-align: justify; float: left; padding-left: 10px;">Количество товаров и услуг, доступных через электронные торговые площадки на население города
+                     по данным Yandex
+                            </td>
+                            <td>{{ index.indicator46_1 }}</td>
+                            <td>{{ index.indicator46_1_value }}</td>
+                            <td>{{ index.indicator46_1_date }}</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="text-align: justify; float: left; padding-left: 10px;">Количество товаров и услуг, доступных через электронные торговые площадки на население города
+                     по данным Youla
+                            </td>
+                            <td>{{ index.indicator46_2 }}</td>
+                            <td>{{ index.indicator46_2_value }}</td>
+                            <td>{{ index.indicator46_2_date }}</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td style="text-align: justify; float: left; padding-left: 10px;">Количество пунтков доставки компаний электронной торговли (постоматов) расположенных на
+                     территории городских земель (2GIS)
+                            </td>
+                            <td>{{ index.indicator47 }}</td>
+                            <td>{{ index.indicator47_value }}</td>
+                            <td>{{ index.indicator47_date }}</td>
+                        </tr>
+                    </table>
+                    <div style="padding-top: 24px; padding-bottom: 20px; padding-right: 10px;">
+                        <form action="{{request.path}}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{city.id}}" name="city_id">
+                            <button type="submit" class="slide_btn" style="border: 1px solid #59ADFF;font-size: 15px;padding: 10px 30px 10px;font-weight: 600;border-radius: 10px;color: #fff;background-color: #59ADFF;float: right;">Обновить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</div>
+
+
+</div>
+{% endblock %}
