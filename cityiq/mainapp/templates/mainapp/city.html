@@ -1,0 +1,128 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <section id="main" style="padding-top: 40px; padding-bottom: 40px; border-radius: 40px;">
+
+        <div style="padding-left: 50px; padding-right: 50px;">
+            <div style="display: flow-root;">
+                <div style="float: left;">
+                    <h3 style="text-align: left; font-weight:bold; padding-top: 20px; font-size: 36px;">{{ city.name }}
+                        <a href="/tcity/{{ city.type_city }}"style="font-weight: normal; font-size: 24px">({{ city.get_city_type }})</a></h3>
+                    <h3 style="font-weight:bold;">IQ Города:<a style="color: #59ADFF"> {{ index.index_iq }}</a></h3>
+                </div>
+                <img class="img" src="{{ city.link_gerb }}">
+            </div>
+
+            <div>
+                <div class="margbot30" style="font-size: 24px; width: 100%; text-align: justify; padding-top: 10px">
+                    <p>
+                        {% if city.desc %}
+                        {{ city.desc }}
+                        {% else %}
+                        Нет описания
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <h3 style="font-weight:bold;">Население города: <a class="number" style="font-weight:normal;">{{ city.qty_peopls }}</a>
+                человек</h3>
+            <div>
+                <div class="margbot30" style="font-size: 24px; width: 100%; text-align: justify; padding-top: 10px">
+                    <div id="container"></div>
+                </div>
+            </div>
+            <h3 style="font-weight:bold;">Результаты оценки:</h3>
+            <div>
+                <div class="margbot30" style="font-size: 24px; width: 100%; text-align: justify; padding-top: 10px">
+                    <div class="spiderChart"></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+</div>
+<script>
+        d1 = parseFloat("{{ index.direction1 }}".replace(',','.'));
+        d2 = parseFloat("{{ index.direction2 }}".replace(',','.'));
+        d3 = parseFloat("{{ index.direction3 }}".replace(',','.'));
+        d4 = parseFloat("{{ index.direction4 }}".replace(',','.'));
+        d5 = parseFloat("{{ index.direction5 }}".replace(',','.'));
+        d6 = parseFloat("{{ index.direction6 }}".replace(',','.'));
+        d7 = parseFloat("{{ index.direction7 }}".replace(',','.'));
+        d8 = parseFloat("{{ index.direction8 }}".replace(',','.'));
+        d9 = parseFloat("{{ index.direction9 }}".replace(',','.'));
+        d10 = parseFloat("{{ index.direction10 }}".replace(',','.'));
+        $('.spiderChart').highcharts({
+
+            chart: {
+                polar: true,
+                type: 'line',
+                style: {
+                    fontFamily: "Roboto", // default font
+                    fontSize: '12px'
+                }
+            },
+
+            title: {
+                text: '',
+                x: -80
+            },
+
+            colors: ['#0067ac', '#a02842', '#007680'],
+
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: ["Городское управление", "Инновации для городской среды", "Интеллектуальные системы общественной безопасности", "Инфраструктура сетей связи", "Умное ЖКХ", "Умный городской транспорт", "Интеллектуальный системы экологической безопасности", "Туризм и сервис", "Интеллектуальные системы социальных услуг", "Экономическое состояние и инвестиционный климат"],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0,
+                max: 12,
+                tickInterval: 3
+            },
+
+            credits: {
+                text: ''
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}"> <b>{point.y:,.2f}</b><br/>'
+            },
+
+            legend: {
+                enabled: false,
+            },
+
+            series: [{
+                data: [d1,
+                        d2,
+                        d3,
+                        d4,
+                        d5,
+                        d6,
+                        d7,
+                        d8,
+                        d9,
+                        d10],
+                pointPlacement: 'on'
+            }]
+        });
+    </script>
+    <script>
+        Array.from(document.getElementsByClassName('number'), e => e.textContent = e.textContent.replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 '));
+    </script>
+{% endblock %}

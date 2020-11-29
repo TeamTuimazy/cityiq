@@ -1,0 +1,26 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<section id="home" class="padbot0">
+    <div class="flexslider top_slider">
+        <div style="max-width: 900px; margin-right: auto; margin-left: auto; padding-top: 60px; padding-bottom: 100px;">
+            <div class="cont">
+                <div class="col-12">
+                    <div class="banner_img" style="text-align: center;">
+                        <img src="{% static 'img/pass.png' %}" width="450px" height="450px">
+                    </div>
+                </div>
+                <div class="col-md col-12">
+                    <p style="text-align:center; color: #ffffff; font-family: Roboto; font-size: 26px; font-weight: 100; line-height: 30px; text-align: justify;">
+                        Ой, в данный момент страница недоступна. В течении некоторого времени сайт восстановиться.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

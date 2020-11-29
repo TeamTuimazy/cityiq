@@ -20,12 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm=^$u%s@jw9$lbqb6vnb^+i*g6o_*u1r#s-@w8_j4w$!d2udfu'
+SECRET_KEY = 'ke6we*flgli7df9le1tefs&4s^^_r8^bumyz4@-&t_7vwot)$v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '192.168.50.50',
+    '83.174.239.25',
+    '7232060bc89f.sn.mynetname.net',
+]
 
 
 # Application definition
@@ -37,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainapp',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -103,9 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
+
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 

@@ -1,0 +1,25 @@
+{% load static %}
+<header>
+    <div class="menu_block">
+        <div class="container clearfix">
+            <div class="logo pull-left">
+                <a href="{% url 'main' %}"><img src="{% static 'img/logo.png' %}" style="padding-top: 7px;"></a>
+            </div>
+            <div id="search-form"  class="pull-left" style="width:50%;color:#fff;">
+                <form method="POST" action="/search/">
+                    {% csrf_token %}
+                    <input type="text" name="search" value="Поиск"
+                           onFocus="if (this.value == 'Поиск') this.value = '';"
+                           onBlur="if (this.value == '') this.value = 'Поиск';"  style="width:100%; border-bottom: 1px solid #000;"/>
+                </form>
+            </div>
+            <div class="pull-right">
+                <nav class="navmenu center">
+                    <ul>
+                        <li class="scroll_btn"><a href="#">О проекте</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

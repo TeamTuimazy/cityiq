@@ -1,0 +1,106 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<section id="home" class="padbot0">
+    <div class="flexslider top_slider">
+        <div style="max-width: 64em; padding-right: 0.75em; padding-left: 0.75em; margin-right: auto; margin-left: auto; padding-top: 100px;">
+            <div style="display: flex; flex-wrap: wrap; margin-right: -0.75em; margin-left: -0.75em;;">
+                <div class="col-md-4 col-12">
+                    <div class="banner_img" style="text-align: center; width: 300px;">
+                        <img src="{% static 'img/bisnes.png' %}" width="300px" height="300px" style="max-width: none;">
+                    </div>
+                </div>
+                <div class="col-md-8 col-12" style="padding-top: 60px; padding-bottom: 60px;">
+                    <p style="color: #ffffff; font-family: Roboto; font-size: 26px; font-weight: 100; line-height: 30px;">
+                        Изучай статистику городов, будь в курсе качества своего города и смотри за его будущим
+                        развитием!</p>
+                    <a class="slide_btn" style="font-size: 15px;" href="{% url 'random' %}">Случайный город</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="services_block padbot40" data-appear-top-offset="-200" data-animated="fadeInUp">
+        <div class="container">
+            {% regroup index by city.get_city_type as indexes_list %}
+            {% for city_type, cities in indexes_list %}
+            <div class="row" style="text-align: center;">
+                <h4 style="text-align: left; padding-left: 4%; font-weight:bold;">{{ city_type }}<a onclick="javascript:history.back(); return false;" style="font-weight: normal; cursor: pointer;"> (назад)</a></h4>
+                {% for city in cities %}
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-ss-12 margbot30">
+                    <a class="services_item" href="/city/{{ city.city.id }}/" style="cursor:pointer">
+                        <div style="border-radius: 50%; display: inline-table; box-shadow: 0px 2px 4px rgba(100,100,100,0.5);">
+                            <center>
+                                <div id="container_{{ forloop.parentloop.counter }}{{ forloop.counter }}" style="margin: 20px; width: 200px; height: 200px; position: relative;" data-city="{{ city.city.name }}" data-maxvalue=120.0 data-value={{ city.index_iq }}></div>
+                            </center>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+        var Gradient = '<defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#8E37D7"/><stop offset="50%" stop-color="#6B8DD6"/><stop offset="100%" stop-color="#2cd8d5"/></linearGradient></defs>';
+
+        function go_indicator(container) {
+            el = document.getElementById(container);
+            city = el.dataset.city;
+            max_value = parseFloat(el.dataset.maxvalue);
+            el_value = el.dataset.value.replace(',','.');
+            el_value = parseFloat(el_value);
+            var bar = new ProgressBar.Circle("#" + container, {
+                color: 'url(#gradient)',
+                // This has to be the same size as the maximum width to
+                // prevent clipping
+                strokeWidth: 6,
+                trailWidth: 1,
+                easing: 'easeInOut',
+                duration: 1400,
+                trailColor: '#eee',
+                svgStyle: null,
+                text: {
+                    autoStyleContainer: false
+                },
+                // Set default step function for all animate calls
+                step: function(state, circle) {
+
+                    var value = Math.round(circle.value() * max_value * 100) / 100;
+                    city = document.getElementById(container).dataset.city;
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                        circle.setText("<center>" + city + "<br>" + value + "</center>");
+                    }
+
+                }
+            });
+            bar.svg.insertAdjacentHTML('afterbegin', Gradient);
+            bar.text.style.fontFamily = '"Robotic", Helvetica, sans-serif';
+            bar.text.style.fontSize = '2rem';
+            el_value =
+            bar.animate(el_value / max_value);
+        }
+
+        let ids = document.querySelectorAll("[id ^= container_]");
+        ids.forEach(function(e) {
+            go_indicator(e.id);
+        });
+
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<section id="about">
+    <div class="services_block padbot40" data-appear-top-offset="-200" data-animated="fadeInUp">
+        <div class="container">
+            <div class="row" style="text-align: center;">
+                <h4 style="text-align: left; padding-left: 4%; font-weight:bold;">Поиск {{ find }}<a onclick="javascript:history.back(); return false;" style="font-weight: normal; cursor: pointer;"> (назад)</a></h4>
+                {% for i in index %}
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 col-ss-12 margbot30">
+                    <a class="services_item" href="/city/{{ i.city.id }}/" style="cursor:pointer">
+                        <div style="border-radius: 50%; display: inline-table; box-shadow: 0px 2px 4px rgba(100,100,100,0.5);">
+                            <center>
+                                <div id="container_{{ forloop.counter }}" style="margin: 20px; width: 200px; height: 200px; position: relative;" data-city="{{ i.city.name }}" data-maxvalue=120.0 data-value={{ i.index_iq }}></div>
+                            </center>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+        var Gradient = '<defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#8E37D7"/><stop offset="50%" stop-color="#6B8DD6"/><stop offset="100%" stop-color="#2cd8d5"/></linearGradient></defs>';
+
+        function go_indicator(container) {
+            el = document.getElementById(container);
+            city = el.dataset.city;
+            max_value = parseFloat(el.dataset.maxvalue);
+            el_value = el.dataset.value.replace(',','.');
+            el_value = parseFloat(el_value);
+            var bar = new ProgressBar.Circle("#" + container, {
+                color: 'url(#gradient)',
+                // This has to be the same size as the maximum width to
+                // prevent clipping
+                strokeWidth: 6,
+                trailWidth: 1,
+                easing: 'easeInOut',
+                duration: 1400,
+                trailColor: '#eee',
+                svgStyle: null,
+                text: {
+                    autoStyleContainer: false
+                },
+                // Set default step function for all animate calls
+                step: function(state, circle) {
+
+                    var value = Math.round(circle.value() * max_value * 100) / 100;
+                    city = document.getElementById(container).dataset.city;
+                    if (value === 0) {
+                        circle.setText('');
+                    } else {
+                        circle.setText("<center>" + city + "<br>" + value + "</center>");
+                    }
+
+                }
+            });
+            bar.svg.insertAdjacentHTML('afterbegin', Gradient);
+            bar.text.style.fontFamily = '"Robotic", Helvetica, sans-serif';
+            bar.text.style.fontSize = '2rem';
+            el_value =
+            bar.animate(el_value / max_value);
+        }
+
+        let ids = document.querySelectorAll("[id ^= container_]");
+        ids.forEach(function(e) {
+            go_indicator(e.id);
+        });
+
+
+
+
+</script>
+{% endblock %}
